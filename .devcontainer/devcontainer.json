@@ -1,0 +1,36 @@
+{
+  "name": "crmuo-home-ops",
+  "image": "mcr.microsoft.com/devcontainers/base:latest",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "username": "vscode",
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers-extra/features/mise:1": {}
+  },
+  "postCreateCommand": "sh .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "github.copilot",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+        "usernamehw.errorlens",
+        "Gruntfuggly.todo-tree"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "mounts": [
+    "source=D:/OneDrive/shell_sync,target=/shell_sync,type=bind,consistency=cached"
+  ]
+}
