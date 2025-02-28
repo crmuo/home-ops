@@ -1,0 +1,4 @@
+kubernetes-talos-node-dell.yaml
+kubernetes-talos-node-acer.yaml
+kubernetes-talos-node-qnap.yaml
+talosconfig
