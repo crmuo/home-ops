@@ -22,7 +22,9 @@
         "redhat.vscode-yaml",
         "tamasfe.even-better-toml",
         "usernamehw.errorlens",
-        "Gruntfuggly.todo-tree"
+        "Gruntfuggly.todo-tree",
+        "signageos.signageos-vscode-sops",
+        "ms-kubernetes-tools.vscode-kubernetes-tools"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",

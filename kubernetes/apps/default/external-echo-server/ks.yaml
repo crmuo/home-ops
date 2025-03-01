@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app echo-server
+  name: &app external-echo-server
   namespace: &namespace default
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 1h
-  path: ./kubernetes/apps/default/echo-server/app
+  path: ./kubernetes/apps/default/external-echo-server/app
   prune: true
   retryInterval: 2m
   sourceRef:
