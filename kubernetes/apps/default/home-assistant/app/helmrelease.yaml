@@ -27,7 +27,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
-          app:
+          *app :
             image:
               repository: ghcr.io/onedr0p/home-assistant
               tag: 2025.2.5@sha256:0e6dfed23d79e76e9bf0d65afbecb0483534fa9ba4a242141362037d3607524a
@@ -85,7 +85,7 @@ spec:
           code-server:
             port: 12321
     ingress:
-      app:
+      *app :
         annotations:
           external-dns.alpha.kubernetes.io/target: internal.${SECRET_DOMAIN}
         className: internal
@@ -94,7 +94,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: app
+                  identifier: *app
                   port: http
       code-server:
         className: internal
@@ -103,7 +103,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: app
+                  identifier: *app
                   port: code-server
     persistence:
       config:
