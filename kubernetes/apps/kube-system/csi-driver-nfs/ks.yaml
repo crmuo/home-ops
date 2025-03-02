@@ -5,13 +5,15 @@ kind: Kustomization
 metadata:
   name: &app csi-driver-nfs
   namespace: &namespace kube-system
+  labels:
+    substitution.flux.home.arpa/disabled: "true"
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 1h
   path: ./kubernetes/apps/kube-system/csi-driver-nfs/app
-  prune: true
+  prune: false
   retryInterval: 2m
   sourceRef:
     kind: GitRepository
