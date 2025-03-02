@@ -2,7 +2,7 @@
 
 # Packages
 sudo apt-get update
-sudo apt-get install -y nmap
+sudo apt-get install -y nmap dnsutils
 
 # Shell
 ln -sf /shell_sync/.zshrc /home/vscode/.zshrc
