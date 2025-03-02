@@ -112,6 +112,12 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /config
+      config-yaml:
+        type: configMap
+        name: home-assistant-config
+        globalMounts:
+          - path: /config/configuration.yaml
+            subPath: configuration.yaml
       logs:
         type: emptyDir
         globalMounts:
