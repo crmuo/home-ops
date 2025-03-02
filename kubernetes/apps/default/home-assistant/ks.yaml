@@ -12,6 +12,7 @@ spec:
   interval: 1h
   dependsOn:
     - name: csi-driver-nfs
+      namespace: kube-system
   path: ./kubernetes/apps/default/home-assistant/app
   prune: true
   retryInterval: 2m
