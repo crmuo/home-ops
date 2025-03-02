@@ -8,3 +8,4 @@ components:
 resources:
   - ./external-echo-server/ks.yaml
   - ./internal-echo-server/ks.yaml
+  - ./home-assistant/ks.yaml
