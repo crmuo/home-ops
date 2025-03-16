@@ -5,10 +5,14 @@ kind: Kustomization
 resources:
   - ./pvc.yaml
   - ./helmrelease.yaml
-# configMapGenerator:
-#   - name: home-assistant-config
-#     files:
-#       - configuration.yaml=./config/configuration.yaml
 
-# generatorOptions:
-#   disableNameSuffixHash: true
+configMapGenerator:
+  - name: home-assistant-config
+    files:
+      - configuration.yaml=./config/configuration.yaml
+      - automations.yaml=./config/automations.yaml
+      - scenes.yaml=./config/scenes.yaml
+      - scripts.yaml=./config/scripts.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

@@ -11,6 +11,8 @@ spec:
       app.kubernetes.io/name: *app
   interval: 1h
   dependsOn:
+    - name: emqx
+      namespace: *namespace
     - name: csi-driver-nfs
       namespace: kube-system
   path: ./kubernetes/apps/default/zigbee2mqtt/app

@@ -35,9 +35,10 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 1h
   dependsOn:
     - name: emqx
+      namespace: *namespace
+  interval: 1h
   path: ./kubernetes/apps/default/emqx/cluster
   postBuild:
     substituteFrom:
