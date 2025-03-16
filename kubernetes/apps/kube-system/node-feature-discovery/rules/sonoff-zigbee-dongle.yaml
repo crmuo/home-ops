@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/nfd.k8s-sigs.io/nodefeaturerule_v1alpha1.json
+apiVersion: nfd.k8s-sigs.io/v1alpha1
+kind: NodeFeatureRule
+metadata:
+  name: sonoff-zigbee-dongle
+spec:
+  rules:
+    - name: sonoff.zigbee
+      labels:
+        sonoff.feature.node.kubernetes.io/zigbee: "true"
+      matchFeatures:
+        - feature: usb.device
+          matchExpressions:
+            # Sonoff Zigbee 3.0 USB Dongle Plus V2
+            # /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_8244907b484eef11a1744ab3174bec31-if00-port0
+            vendor: { op: In, value: ["10c4"] }
+            serial: { op: In, value: ["8244907b484eef11a1744ab3174bec31"] }
