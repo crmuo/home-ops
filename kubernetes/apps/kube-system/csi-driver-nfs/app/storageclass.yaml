@@ -48,9 +48,7 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: 10.0.2.1
   share: /ssd
-  # subDir: config/${pvc.metadata.namespace}-${pvc.metadata.name}
-  # subDir: config/crmuo/${pvc.metadata.namespace}-${pvc.metadata.name}
-  subDir: config/test-delete-me
+  subDir: config/crmuo/${pvc.metadata.namespace}-${pvc.metadata.name}
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 mountOptions:
