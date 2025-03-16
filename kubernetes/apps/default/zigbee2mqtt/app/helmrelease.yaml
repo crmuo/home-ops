@@ -69,7 +69,9 @@ spec:
       config:
         existingClaim: *app
       usb:
+        enabled: true
         type: hostPath
-        mountPath: /dev/zigbee
         hostPath: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_8244907b484eef11a1744ab3174bec31-if00-port0
         hostPathType: CharDevice
+        globalMounts:
+          - path: /dev/zigbee
