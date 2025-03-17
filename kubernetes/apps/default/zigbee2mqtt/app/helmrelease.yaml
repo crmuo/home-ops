@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &app zigbee2mqtt
 spec:
-  interval: 1h
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
@@ -15,6 +15,7 @@ spec:
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
   values:
     controllers:
@@ -49,12 +50,35 @@ spec:
               ZIGBEE2MQTT_DATA: /config
             securityContext:
               privileged: true
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.97.2@sha256:6ff0e9cf5a553b3961ece200be75e21e8c887ed0ae28a7c28213722dccf74b0c
+            args:
+              [
+                "--auth",
+                "none",
+                "--user-data-dir",
+                "/config/.vscode",
+                "--extensions-dir",
+                "/config/.vscode",
+                "--port",
+                "12321",
+                "/config",
+              ]
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
     service:
       *app :
         controller: *app
         ports:
           http:
             port: *port
+          code-server:
+            port: 12321
     ingress:
       *app :
         annotations:
@@ -67,6 +91,17 @@ spec:
                 service:
                   identifier: *app
                   port: http
+      code-server:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.${SECRET_DOMAIN}
+        className: internal
+        hosts:
+          - host: "{{ .Release.Name }}-code.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: code-server
     persistence:
       config:
         existingClaim: *app
