@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: emqx-init-user-config
+data:
+  init-user.json: |
+    [
+      {"user_id": "${USERNAME}", "password": "${EMQX_MQTT_PASSWORD}", "is_superuser": true}
+    ]

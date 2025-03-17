@@ -24,10 +24,6 @@ spec:
             type = built_in_database
             enable = true
           }
-          {
-            type = file
-            path = "/opt/init-acl"
-          }
         ]
         no_match: "deny"
       }
@@ -37,22 +33,20 @@ spec:
         reloader.stakater.com/auto: "true"
     spec:
       replicas: 2
-      envFrom:
-        - secretRef:
-            name: emqx-secret
+      env:
+        - name: EMQX_DASHBOARD__DEFAULT_USERNAME
+          value: ${USERNAME}
+        - name: EMQX_DASHBOARD__DEFAULT_PASSWORD
+          value: ${EMQX_DASHBOARD_PASSWORD}
       extraVolumeMounts:
         - name: init-user
           mountPath: /opt/init-user.json
           subPath: init-user.json
           readOnly: true
-        - name: init-user
-          mountPath: /opt/init-acl
-          subPath: init-acl
-          readOnly: true
       extraVolumes:
         - name: init-user
-          secret:
-            secretName: emqx-init-user-secret
+          configMap:
+            name: emqx-init-user-config
   listenersServiceTemplate:
     metadata:
       annotations:

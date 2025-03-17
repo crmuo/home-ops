@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./cluster.yaml
   - ./ingress.yaml
-  - ./secret.sops.yaml
+  - ./configmap.yaml
