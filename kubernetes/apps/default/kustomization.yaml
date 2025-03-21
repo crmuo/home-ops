@@ -11,3 +11,4 @@ resources:
   - ./home-assistant/ks.yaml
   - ./emqx/ks.yaml
   - ./zigbee2mqtt/ks.yaml
+  - ./zwave-js-ui/ks.yaml

@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/nfd.k8s-sigs.io/nodefeaturerule_v1alpha1.json
+apiVersion: nfd.k8s-sigs.io/v1alpha1
+kind: NodeFeatureRule
+metadata:
+  name: zooz-zwave-dongle
+spec:
+  rules:
+    - name: zooz.zwave
+      labels:
+        zooz.feature.node.kubernetes.io/zwave: "true"
+      matchFeatures:
+        - feature: usb.device
+          matchExpressions:
+            # Zooz 800 Z-Wave Stick
+            # /dev/serial/by-id/usb-Zooz_800_Z-Wave_Stick_533D004242-if00
+            vendor: { op: In, value: ["1a86"] }
+            serial: { op: In, value: ["533D004242"] }
