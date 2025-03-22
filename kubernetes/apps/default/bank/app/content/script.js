@@ -112,14 +112,17 @@ function displayTransactions() {
       transaction.balance
     );
 
-    // Create transaction pair container for mobile view
     if (isMobileView) {
-      // Main row
+      // Create transaction group container for mobile view
+      const group = document.createElement("tbody");
+      group.classList.add("transaction-group");
+
+      // Main transaction row
       const row = document.createElement("tr");
+      row.classList.add("transaction-row");
       if (index === 0 && currentPage === 1) {
         row.classList.add("latest-transaction");
       }
-      row.classList.add("transaction-pair");
 
       row.innerHTML = `
         <td class="date-compact">${compactDate}</td>
@@ -128,16 +131,19 @@ function displayTransactions() {
         <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
       `;
 
-      transactionList.appendChild(row);
-
-      // Description row for mobile view
+      // Description row
       const descRow = document.createElement("tr");
       descRow.classList.add("description-row");
-      descRow.classList.add("transaction-pair");
       descRow.innerHTML = `
         <td colspan="3" class="description-cell">${transaction.description}</td>
       `;
-      transactionList.appendChild(descRow);
+
+      // Add rows to group
+      group.appendChild(row);
+      group.appendChild(descRow);
+
+      // Add group to transaction list
+      transactionList.appendChild(group);
     } else {
       // Desktop view - single row
       const row = document.createElement("tr");
@@ -218,7 +224,7 @@ function setupHistoryToggle() {
     // Update toggle button with appropriate icon and text
     toggleButton.innerHTML = isVisible
       ? '<span class="toggle-icon">▼</span> Transaction history'
-      : '<span class="toggle-icon">▲</span> Transaction history';
+      : '<span class="toggle-icon">▲</span> Hide history';
   });
 }
 
