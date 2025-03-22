@@ -30,7 +30,7 @@ spec:
           app:
             image:
               repository: nginx
-              tag: 1.25.4-alpine
+              tag: 1.27.4-alpine
             env:
               PORT: &port 80
             probes:
