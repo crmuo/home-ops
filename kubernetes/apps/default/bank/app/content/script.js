@@ -114,30 +114,31 @@ function displayTransactions() {
 
     tableContainer.appendChild(row);
 
-    // Create card for mobile view with improved labels and structure
+    // Create card for mobile view with improved layout
     const card = document.createElement("div");
     card.className = "transaction-card";
     if (isLatest) card.classList.add("latest-transaction");
 
     card.innerHTML = `
-      <div class="transaction-header">
+      <div class="transaction-card-content">
         <div class="transaction-date">${formatDate(transaction.date)}</div>
-        <div class="transaction-amounts">
-          <div class="amount-wrapper">
-            <div class="label">Amount</div>
-            <div class="transaction-amount ${amountClass}">${getCurrencyHTML(
+
+        <div class="transaction-balance-wrapper">
+          <div class="label">Balance</div>
+          <div class="transaction-balance">${getCurrencyHTML(
+            transaction.balance
+          )}</div>
+        </div>
+
+        <div class="transaction-description">${transaction.description}</div>
+
+        <div class="transaction-amount-wrapper">
+          <div class="label">Amount</div>
+          <div class="transaction-amount ${amountClass}">${getCurrencyHTML(
       amount
     )}</div>
-          </div>
-          <div class="balance-wrapper">
-            <div class="label">Balance</div>
-            <div class="transaction-balance">${getCurrencyHTML(
-              transaction.balance
-            )}</div>
-          </div>
         </div>
       </div>
-      <div class="transaction-description">${transaction.description}</div>
     `;
 
     cardsContainer.appendChild(card);
