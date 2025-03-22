@@ -1,6 +1,6 @@
 // Global variables
 let allTransactions = [];
-const transactionsPerPage = 5;
+const transactionsPerPage = 100;
 let currentPage = 1;
 
 // Function to load transactions from the JSON file
@@ -73,16 +73,25 @@ function displayTransactions() {
     const amount = parseFloat(transaction.amount).toFixed(2);
     const amountClass =
       transaction.amount >= 0 ? "amount-positive" : "amount-negative";
-    const amountPrefix = transaction.amount >= 0 ? "+" : "";
+
+    // Split amount into dollars and cents
+    const absAmount = Math.abs(amount);
+    const dollars = Math.floor(absAmount);
+    const cents = absAmount.toString().split(".")[1];
+
+    // Format with minus sign for negative values and no prefix for positive
+    const amountPrefix = transaction.amount < 0 ? "-" : "";
 
     // Format balance
     const balance = parseFloat(transaction.balance).toFixed(2);
+    const balanceDollars = Math.floor(balance);
+    const balanceCents = balance.toString().split(".")[1];
 
     row.innerHTML = `
       <td>${formattedDate}</td>
       <td>${transaction.description}</td>
-      <td class="${amountClass}">${amountPrefix}$${Math.abs(amount)}</td>
-      <td>$${balance}</td>
+      <td class="${amountClass}">${amountPrefix}$${dollars}<span class="cents">.${cents}</span></td>
+      <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
     `;
 
     transactionList.appendChild(row);
@@ -95,7 +104,18 @@ function displayTransactions() {
 // Update pagination controls
 function updatePagination() {
   const paginationContainer = document.getElementById("pagination");
+  const paginationInfo = document.getElementById("pagination-info");
   const totalPages = Math.ceil(allTransactions.length / transactionsPerPage);
+
+  // Hide pagination elements if there's only one page or less
+  if (totalPages <= 1) {
+    paginationContainer.style.display = "none";
+    paginationInfo.style.display = "none";
+    return;
+  } else {
+    paginationContainer.style.display = "flex";
+    paginationInfo.style.display = "block";
+  }
 
   paginationContainer.innerHTML = "";
 
@@ -124,7 +144,6 @@ function updatePagination() {
   paginationContainer.appendChild(nextButton);
 
   // Pagination info
-  const paginationInfo = document.getElementById("pagination-info");
   paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`;
 }
 
@@ -136,9 +155,6 @@ function setupHistoryToggle() {
   toggleButton.addEventListener("click", () => {
     const isVisible = historySection.style.display === "block";
     historySection.style.display = isVisible ? "none" : "block";
-    toggleButton.textContent = isVisible
-      ? "View transaction history"
-      : "Hide transaction history";
   });
 }
 

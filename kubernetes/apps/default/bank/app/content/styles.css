@@ -23,7 +23,7 @@ h1 {
   margin-bottom: 1rem;
 }
 .cents {
-  font-size: 1.5rem;
+  font-size: 0.75em;
   vertical-align: super;
   color: #777;
   font-weight: normal;
@@ -54,6 +54,7 @@ p {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+  font-size: 0.85rem;
 }
 .transaction-table th {
   text-align: left;
