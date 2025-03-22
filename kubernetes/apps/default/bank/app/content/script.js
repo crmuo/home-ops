@@ -123,18 +123,20 @@ function displayTransactions() {
       <div class="transaction-card-content">
         <div class="transaction-date">${formatDate(transaction.date)}</div>
 
-        <div class="transaction-amount-wrapper">
-          <div class="label">Amount</div>
-          <div class="transaction-amount ${amountClass}">${getCurrencyHTML(
+        <div class="transaction-amounts">
+          <div class="transaction-amount-wrapper">
+            <span class="label">Amount:</span>
+            <span class="transaction-amount ${amountClass}">${getCurrencyHTML(
       amount
-    )}</div>
-        </div>
+    )}</span>
+          </div>
 
-        <div class="transaction-balance-wrapper">
-          <div class="label">Balance</div>
-          <div class="transaction-balance">${getCurrencyHTML(
-            transaction.balance
-          )}</div>
+          <div class="transaction-balance-wrapper">
+            <span class="label">Balance:</span>
+            <span class="transaction-balance">${getCurrencyHTML(
+              transaction.balance
+            )}</span>
+          </div>
         </div>
 
         <div class="transaction-description">${transaction.description}</div>
