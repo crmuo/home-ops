@@ -1,6 +1,6 @@
 // Global variables
 let allTransactions = [];
-const transactionsPerPage = 100;
+const transactionsPerPage = 20;
 let currentPage = 1;
 let isMobileView = window.innerWidth <= 600;
 
@@ -44,12 +44,19 @@ function formatCurrency(amount) {
   return { dollars, cents };
 }
 
+// Format currency display with flexbox container
+function formatCurrencyHTML(dollars, cents, isNegative = false) {
+  const prefix = isNegative ? "-" : "";
+  return `<span class="amount-container">${prefix}$${dollars}<span class="cents">.${cents}</span></span>`;
+}
+
 // Update current balance display
 function updateCurrentBalance(balance) {
   const { dollars, cents } = formatCurrency(balance);
-  document.getElementById(
-    "current-balance"
-  ).innerHTML = `$${dollars}<span class="cents">.${cents}</span>`;
+  document.getElementById("current-balance").innerHTML = formatCurrencyHTML(
+    dollars,
+    cents
+  );
 }
 
 // Format date for display
@@ -101,6 +108,19 @@ function displayTransactions() {
   );
   const pageTransactions = allTransactions.slice(startIndex, endIndex);
 
+  // Add table headers for mobile
+  if (isMobileView) {
+    // Ensure table headers are appropriate for mobile
+    const mobileHeaders = document.querySelectorAll(
+      ".transaction-table thead th"
+    );
+    if (mobileHeaders.length > 0) {
+      mobileHeaders[0].textContent = "Date";
+      mobileHeaders[2].textContent = "Amount";
+      mobileHeaders[3].textContent = "Balance";
+    }
+  }
+
   pageTransactions.forEach((transaction, index) => {
     // Format date
     const formattedDate = formatDate(transaction.date);
@@ -108,11 +128,11 @@ function displayTransactions() {
 
     // Format amount
     const amount = parseFloat(transaction.amount);
-    const amountClass = amount >= 0 ? "amount-positive" : "amount-negative";
+    const isNegative = amount < 0;
+    const amountClass = isNegative ? "amount-negative" : "amount-positive";
     const { dollars: amountDollars, cents: amountCents } = formatCurrency(
       Math.abs(amount)
     );
-    const amountPrefix = amount < 0 ? "-" : "";
 
     // Format balance
     const { dollars: balanceDollars, cents: balanceCents } = formatCurrency(
@@ -131,13 +151,21 @@ function displayTransactions() {
         row.classList.add("latest-transaction");
       }
 
+      // Using the new formatCurrencyHTML function for better alignment
       row.innerHTML = `
         <td class="mobile-date">${compactDate}</td>
-        <td class="mobile-amount ${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
-        <td class="mobile-balance">$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
+        <td class="mobile-amount ${amountClass}">${formatCurrencyHTML(
+        amountDollars,
+        amountCents,
+        isNegative
+      )}</td>
+        <td class="mobile-balance">${formatCurrencyHTML(
+          balanceDollars,
+          balanceCents
+        )}</td>
       `;
 
-      // Description row
+      // Description row - Fix colspan to ensure correct layout
       const descRow = document.createElement("tr");
       descRow.classList.add("description-row");
       descRow.innerHTML = `
@@ -160,8 +188,12 @@ function displayTransactions() {
       row.innerHTML = `
         <td class="date-cell">${formattedDate}</td>
         <td>${transaction.description}</td>
-        <td class="${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
-        <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
+        <td class="${amountClass}">${formatCurrencyHTML(
+        amountDollars,
+        amountCents,
+        isNegative
+      )}</td>
+        <td>${formatCurrencyHTML(balanceDollars, balanceCents)}</td>
       `;
 
       transactionList.appendChild(row);
@@ -229,8 +261,8 @@ function setupHistoryToggle() {
 
     // Update toggle button with appropriate icon and text
     toggleButton.innerHTML = isVisible
-      ? '<span class="toggle-icon">▼</span> Transaction history'
-      : '<span class="toggle-icon">▲</span> Hide history';
+      ? '<span class="toggle-icon">▼</span> More'
+      : '<span class="toggle-icon">▲</span> Less';
   });
 }
 
@@ -252,7 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Set initial toggle button state
   document.getElementById("toggle-history").innerHTML =
-    '<span class="toggle-icon">▼</span> Transaction history';
+    '<span class="toggle-icon">▼</span> More';
 
   // Handle window resize
   window.addEventListener("resize", handleResize);
