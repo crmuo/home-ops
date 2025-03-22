@@ -2,7 +2,6 @@
 let allTransactions = [];
 const transactionsPerPage = 20;
 let currentPage = 1;
-let isMobileView = window.innerWidth <= 600;
 
 // Function to load transactions from the JSON file
 async function loadTransactions() {
@@ -44,62 +43,51 @@ function formatCurrency(amount) {
   return { dollars, cents };
 }
 
-// Format currency display with flexbox container
-function formatCurrencyHTML(dollars, cents, isNegative = false) {
+// Get currency HTML
+function getCurrencyHTML(amount) {
+  const isNegative = amount < 0;
+  const { dollars, cents } = formatCurrency(Math.abs(amount));
   const prefix = isNegative ? "-" : "";
-  return `<span class="amount-container">${prefix}$${dollars}<span class="cents">.${cents}</span></span>`;
+
+  return `${prefix}$${dollars}<span class="cents">.${cents}</span>`;
 }
 
 // Update current balance display
 function updateCurrentBalance(balance) {
-  const { dollars, cents } = formatCurrency(balance);
-  document.getElementById("current-balance").innerHTML = formatCurrencyHTML(
-    dollars,
-    cents
-  );
+  document.getElementById("current-balance").innerHTML =
+    getCurrencyHTML(balance);
 }
 
 // Format date for display
-function formatDate(dateString, compact = false) {
+function formatDate(dateString, includeTime = true) {
   const date = new Date(dateString);
 
-  if (compact) {
-    // Shorter format for mobile
-    const dateStr = date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
+  const dateStr = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
-    const timeStr = date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
+  if (!includeTime) return dateStr;
 
-    return `${dateStr}<br>${timeStr}`;
-  }
+  const timeStr = date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
 
-  // More compact format for desktop to avoid line breaks
-  return (
-    date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }) +
-    " " +
-    date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    })
-  );
+  return `${dateStr} ${timeStr}`;
 }
 
 // Display transactions for current page
 function displayTransactions() {
-  const transactionList = document.getElementById("transaction-list");
-  transactionList.innerHTML = "";
+  // Get both container elements
+  const tableContainer = document.getElementById("transaction-table-body");
+  const cardsContainer = document.getElementById("transaction-cards");
+
+  // Clear both containers
+  tableContainer.innerHTML = "";
+  cardsContainer.innerHTML = "";
 
   const startIndex = (currentPage - 1) * transactionsPerPage;
   const endIndex = Math.min(
@@ -108,96 +96,43 @@ function displayTransactions() {
   );
   const pageTransactions = allTransactions.slice(startIndex, endIndex);
 
-  // Add table headers for mobile
-  if (isMobileView) {
-    // Ensure table headers are appropriate for mobile
-    const mobileHeaders = document.querySelectorAll(
-      ".transaction-table thead th"
-    );
-    if (mobileHeaders.length > 0) {
-      mobileHeaders[0].textContent = "Date";
-      mobileHeaders[2].textContent = "Amount";
-      mobileHeaders[3].textContent = "Balance";
-    }
-  }
-
   pageTransactions.forEach((transaction, index) => {
-    // Format date
-    const formattedDate = formatDate(transaction.date);
-    const compactDate = formatDate(transaction.date, true);
-
-    // Format amount
     const amount = parseFloat(transaction.amount);
-    const isNegative = amount < 0;
-    const amountClass = isNegative ? "amount-negative" : "amount-positive";
-    const { dollars: amountDollars, cents: amountCents } = formatCurrency(
-      Math.abs(amount)
-    );
+    const amountClass = amount < 0 ? "amount-negative" : "amount-positive";
+    const isLatest = index === 0 && currentPage === 1;
 
-    // Format balance
-    const { dollars: balanceDollars, cents: balanceCents } = formatCurrency(
-      transaction.balance
-    );
+    // Create table row for desktop view
+    const row = document.createElement("tr");
+    if (isLatest) row.classList.add("latest-transaction");
 
-    if (isMobileView) {
-      // Create transaction group container for mobile view
-      const group = document.createElement("tbody");
-      group.classList.add("transaction-group");
+    row.innerHTML = `
+      <td class="date-cell">${formatDate(transaction.date)}</td>
+      <td class="desc-cell">${transaction.description}</td>
+      <td class="amount-cell ${amountClass}">${getCurrencyHTML(amount)}</td>
+      <td class="balance-cell">${getCurrencyHTML(transaction.balance)}</td>
+    `;
 
-      // Main transaction row
-      const row = document.createElement("tr");
-      row.classList.add("transaction-row");
-      if (index === 0 && currentPage === 1) {
-        row.classList.add("latest-transaction");
-      }
+    tableContainer.appendChild(row);
 
-      // Using the new formatCurrencyHTML function for better alignment
-      row.innerHTML = `
-        <td class="mobile-date">${compactDate}</td>
-        <td class="mobile-amount ${amountClass}">${formatCurrencyHTML(
-        amountDollars,
-        amountCents,
-        isNegative
-      )}</td>
-        <td class="mobile-balance">${formatCurrencyHTML(
-          balanceDollars,
-          balanceCents
-        )}</td>
-      `;
+    // Create card for mobile view
+    const card = document.createElement("div");
+    card.className = "transaction-card";
+    if (isLatest) card.classList.add("latest-transaction");
 
-      // Description row - Fix colspan to ensure correct layout
-      const descRow = document.createElement("tr");
-      descRow.classList.add("description-row");
-      descRow.innerHTML = `
-        <td colspan="3" class="description-cell">${transaction.description}</td>
-      `;
+    card.innerHTML = `
+      <div class="transaction-header">
+        <div class="transaction-date">${formatDate(transaction.date)}</div>
+        <div class="transaction-amount ${amountClass}">${getCurrencyHTML(
+      amount
+    )}</div>
+        <div class="transaction-balance">${getCurrencyHTML(
+          transaction.balance
+        )}</div>
+      </div>
+      <div class="transaction-description">${transaction.description}</div>
+    `;
 
-      // Add rows to group
-      group.appendChild(row);
-      group.appendChild(descRow);
-
-      // Add group to transaction list
-      transactionList.appendChild(group);
-    } else {
-      // Desktop view - single row
-      const row = document.createElement("tr");
-      if (index === 0 && currentPage === 1) {
-        row.classList.add("latest-transaction");
-      }
-
-      row.innerHTML = `
-        <td class="date-cell">${formattedDate}</td>
-        <td>${transaction.description}</td>
-        <td class="${amountClass}">${formatCurrencyHTML(
-        amountDollars,
-        amountCents,
-        isNegative
-      )}</td>
-        <td>${formatCurrencyHTML(balanceDollars, balanceCents)}</td>
-      `;
-
-      transactionList.appendChild(row);
-    }
+    cardsContainer.appendChild(card);
   });
 
   // Update pagination
@@ -266,17 +201,6 @@ function setupHistoryToggle() {
   });
 }
 
-// Handle window resize events
-function handleResize() {
-  const wasAlreadyMobile = isMobileView;
-  isMobileView = window.innerWidth <= 600;
-
-  // Only redraw if we're crossing the mobile/desktop boundary
-  if (wasAlreadyMobile !== isMobileView) {
-    displayTransactions();
-  }
-}
-
 // Initialize the app
 document.addEventListener("DOMContentLoaded", () => {
   loadTransactions();
@@ -285,11 +209,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Set initial toggle button state
   document.getElementById("toggle-history").innerHTML =
     '<span class="toggle-icon">▼</span> More';
-
-  // Handle window resize
-  window.addEventListener("resize", handleResize);
-  handleResize();
-
-  // Refresh data every 30 seconds
-  setInterval(loadTransactions, 30000);
 });

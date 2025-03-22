@@ -12,23 +12,29 @@
       <button class="toggle-button" id="toggle-history"></button>
 
       <div class="history-section" id="history-section">
-        <div id="transaction-container">
-          <table class="transaction-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Balance</th>
-              </tr>
-            </thead>
-            <tbody id="transaction-list">
-              <!-- Transactions will be loaded here -->
-            </tbody>
-          </table>
-          <div class="pagination" id="pagination"></div>
-          <div class="pagination-info" id="pagination-info"></div>
+        <!-- Desktop view - table -->
+        <table class="transaction-table mobile-hidden">
+          <thead>
+            <tr>
+              <th class="date-col">Date</th>
+              <th class="desc-col">Description</th>
+              <th class="amount-col">Amount</th>
+              <th class="balance-col">Balance</th>
+            </tr>
+          </thead>
+          <tbody id="transaction-table-body">
+            <!-- Transactions filled by JavaScript -->
+          </tbody>
+        </table>
+
+        <!-- Mobile view - cards -->
+        <div id="transaction-cards" class="mobile-only">
+          <!-- Mobile transaction cards filled by JavaScript -->
         </div>
+
+        <!-- Pagination controls - shared -->
+        <div class="pagination" id="pagination"></div>
+        <div class="pagination-info" id="pagination-info"></div>
       </div>
     </div>
 
