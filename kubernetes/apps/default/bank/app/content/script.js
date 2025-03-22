@@ -112,31 +112,47 @@ function displayTransactions() {
       transaction.balance
     );
 
-    // Main row
-    const row = document.createElement("tr");
-    if (index === 0 && currentPage === 1) {
-      row.classList.add("latest-transaction");
-    }
-
-    row.innerHTML = `
-      <td class="${isMobileView ? "date-compact" : ""}">${
-      isMobileView ? compactDate : formattedDate
-    }</td>
-      <td>${transaction.description}</td>
-      <td class="${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
-      <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
-    `;
-
-    transactionList.appendChild(row);
-
-    // Description row for mobile view
+    // Create transaction pair container for mobile view
     if (isMobileView) {
+      // Main row
+      const row = document.createElement("tr");
+      if (index === 0 && currentPage === 1) {
+        row.classList.add("latest-transaction");
+      }
+      row.classList.add("transaction-pair");
+
+      row.innerHTML = `
+        <td class="date-compact">${compactDate}</td>
+        <td>${transaction.description}</td>
+        <td class="${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
+        <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
+      `;
+
+      transactionList.appendChild(row);
+
+      // Description row for mobile view
       const descRow = document.createElement("tr");
       descRow.classList.add("description-row");
+      descRow.classList.add("transaction-pair");
       descRow.innerHTML = `
         <td colspan="3" class="description-cell">${transaction.description}</td>
       `;
       transactionList.appendChild(descRow);
+    } else {
+      // Desktop view - single row
+      const row = document.createElement("tr");
+      if (index === 0 && currentPage === 1) {
+        row.classList.add("latest-transaction");
+      }
+
+      row.innerHTML = `
+        <td>${formattedDate}</td>
+        <td>${transaction.description}</td>
+        <td class="${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
+        <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
+      `;
+
+      transactionList.appendChild(row);
     }
   });
 
@@ -201,8 +217,8 @@ function setupHistoryToggle() {
 
     // Update toggle button with appropriate icon and text
     toggleButton.innerHTML = isVisible
-      ? '<span class="toggle-icon">▼</span> Show History'
-      : '<span class="toggle-icon">▲</span> Hide History';
+      ? '<span class="toggle-icon">▼</span> Transaction history'
+      : '<span class="toggle-icon">▲</span> Transaction history';
   });
 }
 
@@ -224,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Set initial toggle button state
   document.getElementById("toggle-history").innerHTML =
-    '<span class="toggle-icon">▼</span> Show History';
+    '<span class="toggle-icon">▼</span> Transaction history';
 
   // Handle window resize
   window.addEventListener("resize", handleResize);
