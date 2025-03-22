@@ -89,6 +89,12 @@ spec:
           - path: /usr/share/nginx/html/index.html
             subPath: index.html
             readOnly: true
+          - path: /usr/share/nginx/html/styles.css
+            subPath: styles.css
+            readOnly: true
+          - path: /usr/share/nginx/html/script.js
+            subPath: script.js
+            readOnly: true
           - path: /usr/share/nginx/html/transactions.json
             subPath: transactions.json
             readOnly: true

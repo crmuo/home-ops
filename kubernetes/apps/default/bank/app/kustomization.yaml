@@ -9,6 +9,8 @@ configMapGenerator:
   - name: content
     files:
       - ./index.html
+      - ./styles.css
+      - ./script.js
       - ./transactions.json
 
 generatorOptions:
