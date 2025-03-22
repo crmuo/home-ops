@@ -97,3 +97,7 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+      nginx-run:
+        type: emptyDir
+        globalMounts:
+          - path: /var/run
