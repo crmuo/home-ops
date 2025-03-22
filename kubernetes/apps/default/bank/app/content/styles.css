@@ -103,7 +103,7 @@ h1 {
 
 .transaction-table td.date-cell {
   white-space: nowrap;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: #777;
 }
 
@@ -204,7 +204,7 @@ h1 {
   }
 
   .transaction-date {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: #777;
     grid-column: 1;
     grid-row: 1;
@@ -230,7 +230,7 @@ h1 {
 
   /* Inline labels */
   .label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: #999;
     display: inline;
     margin-right: 0.2rem;
@@ -238,7 +238,7 @@ h1 {
 
   .transaction-amount,
   .transaction-balance {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     font-weight: 500;
     white-space: nowrap;
     display: inline;
