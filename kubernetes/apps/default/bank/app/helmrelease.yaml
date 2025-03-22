@@ -89,3 +89,11 @@ spec:
           - path: /usr/share/nginx/html/index.html
             subPath: index.html
             readOnly: true
+      nginx-cache:
+        type: emptyDir
+        globalMounts:
+          - path: /var/cache/nginx
+      nginx-tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
