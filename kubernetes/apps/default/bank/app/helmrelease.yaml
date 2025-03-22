@@ -87,16 +87,16 @@ spec:
         name: content
         globalMounts:
           - path: /usr/share/nginx/html/index.html
-            subPath: content/index.html
+            subPath: index.html
             readOnly: true
           - path: /usr/share/nginx/html/styles.css
-            subPath: content/styles.css
+            subPath: styles.css
             readOnly: true
           - path: /usr/share/nginx/html/script.js
-            subPath: content/script.js
+            subPath: script.js
             readOnly: true
           - path: /usr/share/nginx/html/transactions.json
-            subPath: content/transactions.json
+            subPath: transactions.json
             readOnly: true
       nginx-cache:
         type: emptyDir
