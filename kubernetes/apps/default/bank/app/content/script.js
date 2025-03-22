@@ -2,6 +2,7 @@
 let allTransactions = [];
 const transactionsPerPage = 100;
 let currentPage = 1;
+let isMobileView = window.innerWidth <= 600;
 
 // Function to load transactions from the JSON file
 async function loadTransactions() {
@@ -52,8 +53,26 @@ function updateCurrentBalance(balance) {
 }
 
 // Format date for display
-function formatDate(dateString) {
+function formatDate(dateString, compact = false) {
   const date = new Date(dateString);
+
+  if (compact) {
+    // Shorter format for mobile
+    const dateStr = date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    const timeStr = date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    return `${dateStr}<br>${timeStr}`;
+  }
+
   return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -75,11 +94,10 @@ function displayTransactions() {
   );
   const pageTransactions = allTransactions.slice(startIndex, endIndex);
 
-  pageTransactions.forEach((transaction) => {
-    const row = document.createElement("tr");
-
+  pageTransactions.forEach((transaction, index) => {
     // Format date
     const formattedDate = formatDate(transaction.date);
+    const compactDate = formatDate(transaction.date, true);
 
     // Format amount
     const amount = parseFloat(transaction.amount);
@@ -94,14 +112,32 @@ function displayTransactions() {
       transaction.balance
     );
 
+    // Main row
+    const row = document.createElement("tr");
+    if (index === 0 && currentPage === 1) {
+      row.classList.add("latest-transaction");
+    }
+
     row.innerHTML = `
-      <td>${formattedDate}</td>
+      <td class="${isMobileView ? "date-compact" : ""}">${
+      isMobileView ? compactDate : formattedDate
+    }</td>
       <td>${transaction.description}</td>
       <td class="${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
       <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
     `;
 
     transactionList.appendChild(row);
+
+    // Description row for mobile view
+    if (isMobileView) {
+      const descRow = document.createElement("tr");
+      descRow.classList.add("description-row");
+      descRow.innerHTML = `
+        <td colspan="3" class="description-cell">${transaction.description}</td>
+      `;
+      transactionList.appendChild(descRow);
+    }
   });
 
   // Update pagination
@@ -163,15 +199,36 @@ function setupHistoryToggle() {
     const isVisible = historySection.style.display === "block";
     historySection.style.display = isVisible ? "none" : "block";
 
-    // Update toggle button text with appropriate arrow
-    toggleButton.innerHTML = isVisible ? "↓ More ↓" : "↑ Less ↑";
+    // Update toggle button with appropriate icon and text
+    toggleButton.innerHTML = isVisible
+      ? '<span class="toggle-icon">▼</span> Show History'
+      : '<span class="toggle-icon">▲</span> Hide History';
   });
+}
+
+// Handle window resize events
+function handleResize() {
+  const wasAlreadyMobile = isMobileView;
+  isMobileView = window.innerWidth <= 600;
+
+  // Only redraw if we're crossing the mobile/desktop boundary
+  if (wasAlreadyMobile !== isMobileView) {
+    displayTransactions();
+  }
 }
 
 // Initialize the app
 document.addEventListener("DOMContentLoaded", () => {
   loadTransactions();
   setupHistoryToggle();
+
+  // Set initial toggle button state
+  document.getElementById("toggle-history").innerHTML =
+    '<span class="toggle-icon">▼</span> Show History';
+
+  // Handle window resize
+  window.addEventListener("resize", handleResize);
+  handleResize();
 
   // Refresh data every 30 seconds
   setInterval(loadTransactions, 30000);

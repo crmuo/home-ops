@@ -21,7 +21,7 @@
     {
       "date": "2025-03-10T18:45:00Z",
       "amount": -9.95,
-      "description": "Buy toy",
+      "description": "Buy toy. Long text example to test the layout of the transaction list. This is a long text example to test the layout of the transaction list.",
       "balance": 175.06
     },
     {
