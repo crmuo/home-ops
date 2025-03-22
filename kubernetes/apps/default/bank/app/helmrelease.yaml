@@ -84,10 +84,13 @@ spec:
     persistence:
       content:
         type: configMap
-        name: index-html
+        name: content
         globalMounts:
           - path: /usr/share/nginx/html/index.html
             subPath: index.html
+            readOnly: true
+          - path: /usr/share/nginx/html/transactions.json
+            subPath: transactions.json
             readOnly: true
       nginx-cache:
         type: emptyDir
