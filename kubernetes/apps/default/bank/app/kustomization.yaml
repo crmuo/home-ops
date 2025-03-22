@@ -9,9 +9,9 @@ configMapGenerator:
   - name: content
     files:
       - index.html=./content/index.html
-      - styles.css=./content/styles.css
-      - script.js=./content/script.js
-      - transactions.json=./content/transactions.json
+      # - styles.css=./content/styles.css
+      # - script.js=./content/script.js
+      # - transactions.json=./content/transactions.json
 
 generatorOptions:
   disableNameSuffixHash: true
