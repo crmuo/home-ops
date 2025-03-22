@@ -8,10 +8,10 @@ resources:
 configMapGenerator:
   - name: content
     files:
-      - ./index.html
-      - ./styles.css
-      - ./script.js
-      - ./transactions.json
+      - ./content/index.html
+      - ./content/styles.css
+      - ./content/script.js
+      - ./content/transactions.json
 
 generatorOptions:
   disableNameSuffixHash: true
