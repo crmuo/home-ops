@@ -33,15 +33,34 @@ async function loadTransactions() {
   }
 }
 
+// Format number to dollars and cents
+function formatCurrency(amount) {
+  const formattedAmount = parseFloat(amount).toFixed(2);
+  const parts = formattedAmount.toString().split(".");
+  const dollars = parts[0];
+  const cents = parts.length > 1 ? parts[1] : "00";
+
+  return { dollars, cents };
+}
+
 // Update current balance display
 function updateCurrentBalance(balance) {
-  const formattedBalance = parseFloat(balance).toFixed(2);
-  const dollars = Math.floor(formattedBalance);
-  const cents = formattedBalance.toString().split(".")[1];
-
+  const { dollars, cents } = formatCurrency(balance);
   document.getElementById(
     "current-balance"
   ).innerHTML = `$${dollars}<span class="cents">.${cents}</span>`;
+}
+
+// Format date for display
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 // Display transactions for current page
@@ -60,37 +79,25 @@ function displayTransactions() {
     const row = document.createElement("tr");
 
     // Format date
-    const date = new Date(transaction.date);
-    const formattedDate = date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const formattedDate = formatDate(transaction.date);
 
     // Format amount
-    const amount = parseFloat(transaction.amount).toFixed(2);
-    const amountClass =
-      transaction.amount >= 0 ? "amount-positive" : "amount-negative";
-
-    // Split amount into dollars and cents
-    const absAmount = Math.abs(amount);
-    const dollars = Math.floor(absAmount);
-    const cents = absAmount.toString().split(".")[1];
-
-    // Format with minus sign for negative values and no prefix for positive
-    const amountPrefix = transaction.amount < 0 ? "-" : "";
+    const amount = parseFloat(transaction.amount);
+    const amountClass = amount >= 0 ? "amount-positive" : "amount-negative";
+    const { dollars: amountDollars, cents: amountCents } = formatCurrency(
+      Math.abs(amount)
+    );
+    const amountPrefix = amount < 0 ? "-" : "";
 
     // Format balance
-    const balance = parseFloat(transaction.balance).toFixed(2);
-    const balanceDollars = Math.floor(balance);
-    const balanceCents = balance.toString().split(".")[1];
+    const { dollars: balanceDollars, cents: balanceCents } = formatCurrency(
+      transaction.balance
+    );
 
     row.innerHTML = `
       <td>${formattedDate}</td>
       <td>${transaction.description}</td>
-      <td class="${amountClass}">${amountPrefix}$${dollars}<span class="cents">.${cents}</span></td>
+      <td class="${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
       <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
     `;
 
@@ -155,6 +162,9 @@ function setupHistoryToggle() {
   toggleButton.addEventListener("click", () => {
     const isVisible = historySection.style.display === "block";
     historySection.style.display = isVisible ? "none" : "block";
+
+    // Update toggle button text with appropriate arrow
+    toggleButton.innerHTML = isVisible ? "↓ More ↓" : "↑ Less ↑";
   });
 }
 
