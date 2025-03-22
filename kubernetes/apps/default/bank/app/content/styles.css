@@ -103,6 +103,10 @@ p {
   border-bottom: 1px solid #eee;
 }
 
+.transaction-table td.date-cell {
+  white-space: nowrap;
+}
+
 .transaction-table td:nth-child(3),
 .transaction-table td:nth-child(4) {
   text-align: right;
@@ -173,6 +177,22 @@ p {
 
   .transaction-table {
     font-size: 0.75rem;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .transaction-table td.mobile-date {
+    width: 32%;
+  }
+
+  .transaction-table td.mobile-amount {
+    width: 33%;
+    text-align: right;
+  }
+
+  .transaction-table td.mobile-balance {
+    width: 35%;
+    text-align: right;
   }
 
   .transaction-table th:nth-child(2),

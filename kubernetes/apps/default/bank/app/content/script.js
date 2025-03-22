@@ -73,13 +73,20 @@ function formatDate(dateString, compact = false) {
     return `${dateStr}<br>${timeStr}`;
   }
 
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  // More compact format for desktop to avoid line breaks
+  return (
+    date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }) +
+    " " +
+    date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })
+  );
 }
 
 // Display transactions for current page
@@ -125,10 +132,9 @@ function displayTransactions() {
       }
 
       row.innerHTML = `
-        <td class="date-compact">${compactDate}</td>
-        <td>${transaction.description}</td>
-        <td class="${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
-        <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
+        <td class="mobile-date">${compactDate}</td>
+        <td class="mobile-amount ${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
+        <td class="mobile-balance">$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
       `;
 
       // Description row
@@ -152,7 +158,7 @@ function displayTransactions() {
       }
 
       row.innerHTML = `
-        <td>${formattedDate}</td>
+        <td class="date-cell">${formattedDate}</td>
         <td>${transaction.description}</td>
         <td class="${amountClass}">${amountPrefix}$${amountDollars}<span class="cents">.${amountCents}</span></td>
         <td>$${balanceDollars}<span class="cents">.${balanceCents}</span></td>
