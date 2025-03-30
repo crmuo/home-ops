@@ -2,6 +2,8 @@
   "name": "crmuo-home-ops",
   "image": "mcr.microsoft.com/devcontainers/base:latest",
   "features": {
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+    "ghcr.io/devcontainers-extra/features/talosctl:1": {},
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
       "configureZshAsDefaultShell": true,

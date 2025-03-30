@@ -7,9 +7,13 @@
   "sops.defaults.ageKeyFile": "age.key",
   "vs-kubernetes": {
     "vs-kubernetes.kubeconfig": "./kubeconfig",
-    "vs-kubernetes.knownKubeconfigs": ["./kubeconfig"],
+    "vs-kubernetes.knownKubeconfigs": [
+      "./kubeconfig"
+    ],
     "vscode-kubernetes.kubectl-path": "/home/vscode/.local/share/mise/installs/aqua-kubernetes-kubectl/1.32.2/kubectl",
-    "vscode-kubernetes.helm-path": "/home/vscode/.local/share/mise/installs/aqua-helm-helm/3.17.1/linux-amd64/helm"
+    "vscode-kubernetes.kubectl-path-linux": "/home/vscode/.local/share/mise/installs/aqua-kubernetes-kubectl/1.32.2/kubectl",
+    "vscode-kubernetes.helm-path": "/home/vscode/.local/share/mise/installs/aqua-helm-helm/3.17.1/linux-amd64/helm",
+    "vscode-kubernetes.helm-path-linux": "/home/vscode/.local/share/mise/installs/aqua-helm-helm/3.17.1/linux-amd64/helm"
   },
   "yaml.schemaStore.enable": true,
   "yaml.schemas": {
