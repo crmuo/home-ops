@@ -10,7 +10,7 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: 10.0.2.1
   share: /data
-reclaimPolicy: Delete
+reclaimPolicy: Retain
 volumeBindingMode: Immediate
 mountOptions:
   - nfsvers=4.1
@@ -29,7 +29,7 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: 10.0.2.1
   share: /ssd
-reclaimPolicy: Delete
+reclaimPolicy: Retain
 volumeBindingMode: Immediate
 mountOptions:
   - nfsvers=4.1
@@ -49,7 +49,7 @@ parameters:
   server: 10.0.2.1
   share: /ssd
   subDir: config/crmuo/${pvc.metadata.namespace}-${pvc.metadata.name}
-reclaimPolicy: Delete
+reclaimPolicy: Retain
 volumeBindingMode: Immediate
 mountOptions:
   - nfsvers=4.1
