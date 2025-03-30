@@ -1,40 +1,40 @@
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: nfs-data
-  labels:
-    disk.home.arpa/fs: zfs
-    disk.home.arpa/type: hdd
-provisioner: nfs.csi.k8s.io
-parameters:
-  server: 10.0.2.1
-  share: /data
-reclaimPolicy: Retain
-volumeBindingMode: Immediate
-mountOptions:
-  - nfsvers=4.1
-  - hard
-  - noatime
+# ---
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: nfs-data
+#   labels:
+#     disk.home.arpa/fs: zfs
+#     disk.home.arpa/type: hdd
+# provisioner: nfs.csi.k8s.io
+# parameters:
+#   server: 10.0.2.1
+#   share: /data
+# reclaimPolicy: Retain
+# volumeBindingMode: Immediate
+# mountOptions:
+#   - nfsvers=4.1
+#   - hard
+#   - noatime
 
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: nfs-ssd
-  labels:
-    disk.home.arpa/fs: zfs
-    disk.home.arpa/type: ssd
-provisioner: nfs.csi.k8s.io
-parameters:
-  server: 10.0.2.1
-  share: /ssd
-reclaimPolicy: Retain
-volumeBindingMode: Immediate
-mountOptions:
-  - nfsvers=4.1
-  - hard
-  - noatime
+# ---
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: nfs-ssd
+#   labels:
+#     disk.home.arpa/fs: zfs
+#     disk.home.arpa/type: ssd
+# provisioner: nfs.csi.k8s.io
+# parameters:
+#   server: 10.0.2.1
+#   share: /ssd
+# reclaimPolicy: Retain
+# volumeBindingMode: Immediate
+# mountOptions:
+#   - nfsvers=4.1
+#   - hard
+#   - noatime
 
 ---
 apiVersion: storage.k8s.io/v1
