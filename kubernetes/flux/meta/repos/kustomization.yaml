@@ -8,4 +8,4 @@ resources:
   - ./csi-driver-nfs.yaml
   - ./emqx.yaml
   - ./node-feature-discovery.yaml
-  - ./headlamp.yaml
+  # - ./headlamp.yaml
