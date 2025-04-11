@@ -18,11 +18,11 @@ spec:
       labels:
         app: apiservice
     spec:
+      imagePullSecrets:
+        - name: registry-secret
       containers:
         - name: apiservice
           image: ${SECRET_REGISTRY}/apiservice:latest
-          imagePullSecrets:
-            - name: registry-secret
           imagePullPolicy: Always
           ports:
             - name: http
