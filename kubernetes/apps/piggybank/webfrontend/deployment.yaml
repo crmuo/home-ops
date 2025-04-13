@@ -32,6 +32,4 @@ spec:
           envFrom:
             - configMapRef:
                 name: webfrontend-env
-            - secretRef:
-                name: webfrontend-secrets
       terminationGracePeriodSeconds: 180
