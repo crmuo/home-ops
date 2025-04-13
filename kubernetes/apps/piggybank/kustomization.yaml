@@ -8,5 +8,5 @@ components:
 resources:
   - ./apiservice/ks.yaml
   - cache
-  - webfrontend
+  - ./webfrontend/ks.yaml
   - dashboard.yaml
