@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app webfrontend
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      *app :
+        replicas: 1
+        strategy: Recreate
+        containers:
+          *app :
+            image:
+              repository: ${SECRET_REGISTRY}/webfrontend
+              tag: latest
+              pullPolicy: Always
+            env:
+              OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+              OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+              OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+              ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+              HTTP_PORTS: &port "8080"
+              services__apiservice__http__0: "http://apiservice:8080"
+              ConnectionStrings__cache: "cache:6379"
+              OTEL_EXPORTER_OTLP_ENDPOINT: "http://aspire-dashboard:18889"
+              OTEL_SERVICE_NAME: "webfrontend"
+              ASPNETCORE_URLS: "http://+:8080;"
+            resources:
+              requests:
+                memory: 128Mi
+                cpu: 250m
+              limits:
+                memory: 256Mi
+                cpu: 500m
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile: { type: RuntimeDefault }
+      imagePullSecrets:
+        - name: registry-auth
+      terminationGracePeriodSeconds: 180
+    service:
+      *app :
+        controller: *app
+        ports:
+          http:
+            port: *port
+          https:
+            port: 8443
+    ingress:
+      *app :
+        className: internal
+        annotations:
+          external-dns.alpha.kubernetes.io/target: "internal.${SECRET_DOMAIN}"
+        hosts:
+          - host: "{{ .Release.Name }}.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: http
+    secrets:
+      registry-auth:
+        enabled: true
+        stringData:
+          .dockerconfigjson: |
+            ${REGISTRY_AUTH}
+        type: kubernetes.io/dockerconfigjson

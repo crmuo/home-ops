@@ -5,8 +5,9 @@ kind: Kustomization
 namespace: piggybank
 components:
   - ../../components/common
+  - ../../components/repos/app-template
 resources:
   - ./apiservice/ks.yaml
-  - cache
+  - ./cache/ks.yaml
   - ./webfrontend/ks.yaml
-  - dashboard.yaml
+  - ./dashboard/ks.yaml
