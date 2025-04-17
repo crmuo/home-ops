@@ -16,3 +16,4 @@ resources:
   # - ./headlamp/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./cloudnative-pg/ks.yaml
+  - ./sonarr/ks.yaml
