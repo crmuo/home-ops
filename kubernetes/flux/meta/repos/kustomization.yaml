@@ -9,3 +9,4 @@ resources:
   - ./emqx.yaml
   - ./node-feature-discovery.yaml
   # - ./headlamp.yaml
+  - ./cloudnative-pg.yaml

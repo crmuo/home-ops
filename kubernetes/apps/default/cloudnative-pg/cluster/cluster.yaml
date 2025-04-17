@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgresql.cnpg.io/cluster_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres
+spec:
+  instances: 3
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.4-28
+  primaryUpdateStrategy: unsupervised
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+  storage:
+    size: 20Gi
+    storageClass: app-config
+  superuserSecret:
+    name: postgres-superuser-secret
+  enableSuperuserAccess: true
+  postgresql:
+    parameters:
+      max_connections: "600"
+      max_slot_wal_keep_size: 10GB
+      shared_buffers: 512MB
+  nodeMaintenanceWindow:
+    inProgress: false
+    reusePVC: true
+  monitoring:
+    enablePodMonitor: true
+  backup:
+    retentionPolicy: 12m
+    barmanObjectStore: &barmanObjectStore
+      data:
+        compression: bzip2
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      destinationPath: ${BACKUP_DESTINATION}/crmuo-default-cloudnative-pg/
+      azureCredentials:
+        connectionString:
+          name: postgres-superuser-secret
+          key: azureConnectionString
+  # Note: previousCluster needs to be set to the name of the previous
+  # cluster when recovering from an existing cnpg cluster
+  # bootstrap:
+  #   recovery:
+  #     source: &previousCluster postgres-v0
+  # # Note: externalClusters is needed when recovering from an existing cnpg cluster
+  # externalClusters:
+  #   - name: *previousCluster
+  #     barmanObjectStore:
+  #       <<: *barmanObjectStore
+  #       serverName: *previousCluster
