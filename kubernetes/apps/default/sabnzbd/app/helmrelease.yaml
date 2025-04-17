@@ -36,10 +36,6 @@ spec:
                 sabnzbd.default.svc,
                 sabnzbd.default.svc.cluster,
                 sabnzbd.default.svc.cluster.local,
-                sabnzbd.pruebas,
-                sabnzbd.pruebas.svc,
-                sabnzbd.pruebas.svc.cluster,
-                sabnzbd.pruebas.svc.cluster.local,
                 sabnzbd.local,
                 sabnzbd.insecto.net
             probes:
