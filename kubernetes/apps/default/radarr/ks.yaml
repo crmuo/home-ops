@@ -3,21 +3,22 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app csi-driver-nfs
-  namespace: &namespace kube-system
-  labels:
-    substitution.flux.home.arpa/disabled: "true"
+  name: &app radarr
+  namespace: &namespace default
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 1h
-  path: ./kubernetes/apps/kube-system/csi-driver-nfs/app
+  dependsOn:
+    - name: csi-driver-nfs
+      namespace: kube-system
+  path: ./kubernetes/apps/default/radarr/app
   postBuild:
     substituteFrom:
       - name: cluster-secrets
         kind: Secret
-  prune: false
+  prune: true
   retryInterval: 2m
   sourceRef:
     kind: GitRepository

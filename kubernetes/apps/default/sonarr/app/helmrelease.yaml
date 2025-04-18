@@ -126,7 +126,7 @@ spec:
         type: emptyDir
       data:
         type: nfs
-        server: 10.0.2.1
+        server: ${IP_NAS}
         path: /data
         globalMounts:
           - path: /data

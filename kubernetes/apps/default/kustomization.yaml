@@ -16,3 +16,4 @@ resources:
   - ./sabnzbd/ks.yaml
   - ./cloudnative-pg/ks.yaml
   - ./sonarr/ks.yaml
+  - ./radarr/ks.yaml
