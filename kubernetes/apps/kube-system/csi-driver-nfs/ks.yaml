@@ -13,10 +13,6 @@ spec:
       app.kubernetes.io/name: *app
   interval: 1h
   path: ./kubernetes/apps/kube-system/csi-driver-nfs/app
-  postBuild:
-    substituteFrom:
-      - name: cluster-secrets
-        kind: Secret
   prune: false
   retryInterval: 2m
   sourceRef:

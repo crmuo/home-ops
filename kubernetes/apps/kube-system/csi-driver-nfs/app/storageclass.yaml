@@ -8,7 +8,7 @@
 #     disk.home.arpa/type: hdd
 # provisioner: nfs.csi.k8s.io
 # parameters:
-#   server: ${IP_NAS}
+#   server: 10.0.2.1
 #   share: /data
 # reclaimPolicy: Retain
 # volumeBindingMode: Immediate
@@ -27,7 +27,7 @@
 #     disk.home.arpa/type: ssd
 # provisioner: nfs.csi.k8s.io
 # parameters:
-#   server: ${IP_NAS}
+#   server: 10.0.2.1
 #   share: /ssd
 # reclaimPolicy: Retain
 # volumeBindingMode: Immediate
@@ -46,7 +46,7 @@ metadata:
     disk.home.arpa/type: ssd
 provisioner: nfs.csi.k8s.io
 parameters:
-  server: ${IP_NAS}
+  server: 10.0.2.1
   share: /ssd
   subDir: config/crmuo/${pvc.metadata.namespace}-${pvc.metadata.name}
 reclaimPolicy: Retain
