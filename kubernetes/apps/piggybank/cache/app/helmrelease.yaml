@@ -26,7 +26,7 @@ spec:
           *app :
             image:
               repository: docker.io/library/redis
-              tag: 8.2
+              tag: 8.4
               pullPolicy: Always
             env:
               OTEL_EXPORTER_OTLP_ENDPOINT: "http://aspire-dashboard:18889"
