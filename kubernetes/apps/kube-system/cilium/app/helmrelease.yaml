@@ -36,3 +36,8 @@ spec:
   values:
     envoy:
       enabled: true
+    cni:
+      install: false
+    kubeProxyReplacement: true
+    securityContext:
+      privileged: true
