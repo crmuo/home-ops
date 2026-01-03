@@ -31,6 +31,3 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
-  values:
-    operator:
-      tolerations: []
