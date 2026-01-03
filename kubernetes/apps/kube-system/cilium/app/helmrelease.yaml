@@ -31,3 +31,6 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
+  values:
+    envoy:
+      enabled: true
