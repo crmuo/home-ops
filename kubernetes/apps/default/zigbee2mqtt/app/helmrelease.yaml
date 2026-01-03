@@ -50,6 +50,13 @@ spec:
               ZIGBEE2MQTT_DATA: /config
             securityContext:
               privileged: true
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
           code-server:
             image:
               repository: ghcr.io/coder/code-server
